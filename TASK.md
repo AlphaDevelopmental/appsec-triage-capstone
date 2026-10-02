@@ -1,5 +1,7 @@
-1. Multi-step because it read the scan then check the policy then identifies the main authentication/authorisation development issues  and then provide fixes against the policy
-2. Reviewable artifact: it produce a remediation brief containing vulnerabilities found, their severity, evidence and recommend remediation
-3. Real Context it Need: the authentication route, authenticaion middleware, authorisation logic, user/session or jwt code and other relevant configuration/dependency files such as package.json, appsec_policy.md, sast_results.json, and sample_triage_brief.md.
-4. Why i know what "good" looks like: i have previously taught application security issues such as broken object level authorisation, broken authentication, session hijacking, xss for cookies theft and also i have test vulnerable web application with burp suite and explain the findings and remediation
+TASK: An agent that triages SAST findings in a Node.js auth workflow using an internal application security policy, opens a PR containing the fixes, and produces a remediation brief.
+
+1. Multi-step because it reads the scan then checks the policy then identifies the main authentication/authorisation development issues and then provides fixes against the policy then opens a PR.
+2. Reviewable artifact: it produces a remediation brief containing vulnerabilities found, their severity, evidence and recommended remediation plus a PR with the code fixes
+3. Real Context it Needs: the authentication route, authentication middleware, authorisation logic, user/session or jwt code and other relevant configuration/dependency files such as package.json, appsec_policy.md, sast_results.json, and sample_triage_brief.md.
+4. Why i know what "good" looks like: i have previously taught application security issues such as broken object level authorisation, broken authentication, session hijacking, xss for cookies theft and also I have tested vulnerable web application with burp suite and explained the findings and remediation
 5. Why it's safe to share: The code itself is synthetic, written by myself and not from a real employer. The JWT secret in it is a deliberately planted fake so the scanner has something to find, and no real secrets exist in the repository: .env files, API keys, passwords, tokens, and production credentials are never exposed to the AI tool.
