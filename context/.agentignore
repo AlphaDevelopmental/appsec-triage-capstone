@@ -1,1 +1,2 @@
-# Excluded on purpose
+# Excluded from agent context on purpose
+docs/frontend_style_guide.md
