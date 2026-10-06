@@ -357,5 +357,4 @@ fix, in both `NODE_ENV` modes, plus a check for the missing-env failure,
 **Final branch / PR:**
 
 - Branch: `appsec/run-1-triage` (created from `run-1` at `be2e99e`)
-- PR: opened against `run-1`. The URL is in the PR itself and in the
-  session's final report.
+- PR: https://github.com/AlphaDevelopmental/appsec-triage-capstone/pull/1 (base `run-1`)
