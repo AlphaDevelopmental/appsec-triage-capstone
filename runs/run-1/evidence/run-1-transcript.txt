@@ -1,0 +1,135 @@
+ ▐▛███▛█   Claude Code v2.1.291
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/appsec-triage-capstone
+
+  Get to finished work sooner with Opus 5.5. Switch anytime with /model.
+
+❯ Follow the instructions in runs/run-1/prompt.md.                              
+
+  Read 8 files, ran 3 shell commands (ctrl+o to expand)
+
+● Confirmed invalid tokens all return 500s with no bypass, but non-production
+  mode leaks a stack trace in the response. I'll refine the harness check, then
+  apply the fix.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(src/middleware/authMiddleware.js)
+  ⎿  Added 8 lines, removed 2 lines
+       1  const jwt = require('jsonwebtoken');
+       2  
+       3 -const JWT_SECRET = "sup3r-s3cret-dev-key-2024";                
+       3 +const JWT_SECRET = process.env.JWT_SECRET;                     
+       4 +if (!JWT_SECRET) throw new Error('JWT_SECRET environment variab
+         +le is not set');                                               
+       5  
+       6  async function authMiddleware(req, res, next) {
+       7    const header = req.headers.authorization;
+       8    if (!header) return res.status(401).json({ error: 'No token' 
+          });
+       9  
+      10    const token = header.split(' ')[1];
+      10 -  const decoded = jwt.verify(token, JWT_SECRET);               
+      11 +  let decoded;                                                 
+      12 +  try {                                                        
+      13 +    decoded = jwt.verify(token, JWT_SECRET, { algorithms: ['HS2
+         +56'] });                                                       
+      14 +  } catch (err) {                                              
+      15 +    return res.status(401).json({ error: 'Invalid token' });   
+      16 +  }                                                            
+      17    req.user = decoded;
+      18    next();
+      19  }
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+● Write(runs/run-1/TRIAGE.md)
+  ⎿  Wrote 361 lines to runs/run-1/TRIAGE.md
+       1 # Remediation Brief: node.js auth service (10/06/2026)
+       3 ## 1. Executive Summary
+       4 
+         n the Node.js
+       6 authentication service (`src/middleware/authMiddleware.js`). The
+       7 (Semgrep 1.168.0) reported one finding; manual review against th
+         e AppSec
+          not report.
+       9 
+         al**. Per
+     … +476 lines (ctrl+o to expand)
+
+● I've written the fix and the brief. Next I'll check the brief for leaked
+  secrets, then commit, push, and open the PR.
+
+  Pushed to appsec/run-1-triage, created PR #1, ran 1 shell command (ctrl+o to expand)
+  ⎿  PostToolUse:Bash says: Tip: Run /ultrareview before you push to catch bugs 
+     with a cloud-based multi-agent review — 3 free reviews left.
+
+● I opened PR #1 against run-1:
+  https://github.com/AlphaDevelopmental/appsec-triage-capstone/pull/1. It
+  changes src/middleware/authMiddleware.js, adds the brief at
+  runs/run-1/TRIAGE.md, and the PR description contains the full brief. The
+  brief has every section the prompt asked for, including the Execution Trail.
+
+  Findings (severity set by the policy, not the scanner):
+
+  ┌──────┬──────────────────────────────┬──────────┬──────────┬────────────┐
+  │  ID  │           Finding            │ Scanner  │  Policy  │    Due     │
+  ├──────┼──────────────────────────────┼──────────┼──────────┼────────────┤
+  │ F-01 │ Hardcoded JWT signing secret │ WARNING  │ Critical │ 2026-10-07 │
+  │      │  (authMiddleware.js:3)       │          │  (§3.1)  │            │
+  ├──────┼──────────────────────────────┼──────────┼──────────┼────────────┤
+  │      │ jwt.verify doesn't restrict  │ not      │ High     │            │
+  │ F-02 │ which signing algorithm it   │ reported │ (§3.2)   │ 2026-10-09 │
+  │      │ accepts (:10)                │          │          │            │
+  ├──────┼──────────────────────────────┼──────────┼──────────┼────────────┤
+  │      │ Token check errors aren't    │          │          │            │
+  │ F-03 │ handled: bad tokens get a    │ not      │ Medium   │ 2026-10-20 │
+  │      │ 500 and, outside production  │ reported │ (§2.iii) │            │
+  │      │ mode, a stack trace          │          │          │            │
+  └──────┴──────────────────────────────┴──────────┴──────────┴────────────┘
+
+  Severity decisions:
+  - F-03 is Medium, not Critical. Section 3.3 makes an error Critical only if it
+    lets the request through. I tested every error path and all of them block
+    the request, so it doesn't apply. The brief records this reasoning.
+  - Scanner line number: the scanner flagged line 10, where the secret is used.
+    It's defined on line 3, so the brief cites both.
+  - Masking: the secret appears as ******** everywhere in the brief and PR.
+
+  The fix: the change is small and limited to that one file:
+  - The secret now comes from the JWT_SECRET environment variable, and the
+    service won't start if it's missing.
+  - Token checks only accept HS256.
+  - Any token error now returns 401 {"error":"Invalid token"}.
+
+  Verification: I ran a throwaway Express test setup before and after the
+  change, both with and without production mode, using a random secret generated
+  for each run.
+  - Every invalid case now returns 401 with no stack trace: malformed, alg=none,
+    wrong secret, and a correct secret signed with HS512.
+  - A valid HS256 token returns 200.
+  - With JWT_SECRET unset, the module refuses to load.
+
+  The repo has no test suite, so no automated tests were run.
+
+  Still to do before merge or deploy:
+  - Rotate the secret. Policy §5 says removing it from the code isn't enough.
+    It's also still in git history at commit 49f3465; I didn't rewrite history
+    because that's destructive and needs the owner's approval.
+  - Set JWT_SECRET in the deployment environment, since the service now won't
+    start without it.
+  - Confirm the token issuer signs with HS256. The issuer's code isn't in the
+    repo, so this is an assumption.
+
+  Files outside the prompt's source list: I also read README.md and
+  context/.agentignore, and the Execution Trail notes this. The README says the
+  secret is a fake; I didn't use that to lower the severity. I didn't open
+  TASK.md, CONTEXT_MANIFEST.md or the frontend style guide.
+
+✻ Cooked for 5m 28s · done 10:11 AM
+
+❯ /export ~/capstone-notes/run-1-transcript.txt                                 
+/exit                                                                           
+  ⎿  Conversation exported to:
+     ~/capstone-notes/run-1-transcript.txt
+     /exit.txt
