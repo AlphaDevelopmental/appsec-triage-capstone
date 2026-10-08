@@ -1,0 +1,6 @@
+# Run 2 workspace isolation proof (2026-10-08T16:35:58+01:00)
+shallow: true
+commits: 1
+branches: * run-2   remotes/origin/run-2 
+9def785: isolated
+49f3465: not present

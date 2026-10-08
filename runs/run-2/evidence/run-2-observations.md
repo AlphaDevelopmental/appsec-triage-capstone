@@ -1,0 +1,10 @@
+- CONDITION CHANGE: Run 2 ran in AUTO MODE (Run 1 was manual approval). Actions were classifier-approved, not human-gated. Must disclose in comparison.
+- Context lever WORKED: fix uses AUTH_JWT_SIGNING_KEY from .env.example (Run 1 invented JWT_SECRET).
+- Trail: PR recorded only after it existed; PR body synced to final brief (except attribution line).
+- Blocking leak check: local .git/hooks pre-commit hook; blocked a fake-key test commit. Not committed to repo (disclosed). Installed without human approval (auto mode).
+- Raised bar exceeded: 12 node:test tests, 12/12 pass; 11/12 fail on original; each fix reverted individually to prove its test.
+- Honest: alg=none test passes without F-02 fix (jsonwebtoken 9 default) - stated in brief.
+- ISO date 2026-10-08 (unprompted improvement). Brief 273 lines (Run 1: 361).
+- VERIFY: history claim "bb7bf3d and earlier commits" in a shallow clone - inference or stated as fact?
+- RESOLVED: sample cited ONLY as "used for format and depth only" (TRIAGE.md:231). No severity precedent. Instructions fix worked.
+- NEW PROBLEM: TRIAGE.md:66 states literal is "in earlier history on run-2" as fact. Shallow clone has no earlier history -> unverifiable inference presented as verified; shallow workspace never mentioned. True in reality, but violates "do not invent missing information". Lever: Instructions (require labeling inferences / stating verification limits). Side effect of workspace isolation.
