@@ -270,4 +270,8 @@ See §4. In order:
 **Branch / PR:**
 
 - Branch `appsec/run-2-triage` was created from `run-2` (`bb7bf3d`).
-- The remediation, tests, `npm test` script and this brief were committed through the secret-leak pre-commit hook.
+- The remediation, tests, `npm test` script and this brief were committed through the secret-leak pre-commit hook (commit `3835e3f`; hook result: passed).
+- Before committing, a fixed-string search confirmed the original secret value does not appear in any changed file.
+- The branch was pushed to `origin`.
+- PR **#2** was opened against `run-2`: https://github.com/AlphaDevelopmental/appsec-triage-capstone/pull/2
+- A follow-up commit added this PR reference to the brief, also through the hook, and the PR description was updated to match the final brief.
