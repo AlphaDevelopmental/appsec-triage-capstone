@@ -1,13 +1,19 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = "sup3r-s3cret-dev-key-2024";
+const JWT_SECRET = process.env.AUTH_JWT_SIGNING_KEY;
+if (!JWT_SECRET) throw new Error('AUTH_JWT_SIGNING_KEY is not set');
 
 async function authMiddleware(req, res, next) {
   const header = req.headers.authorization;
   if (!header) return res.status(401).json({ error: 'No token' });
 
   const token = header.split(' ')[1];
-  const decoded = jwt.verify(token, JWT_SECRET);
+  let decoded;
+  try {
+    decoded = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] });
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
   req.user = decoded;
   next();
 }
