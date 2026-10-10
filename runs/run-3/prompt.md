@@ -1,4 +1,4 @@
-# Run 2 -- AppSec Triage Task
+# Run 3 -- AppSec Triage Task
 
 ## 1. Goal
 
@@ -25,10 +25,11 @@ Do not use:
 
 ## Output
 Create:
-- `runs/run-2/TRIAGE.md`
-- Branch: `appsec/run-2-triage`, created from `run-2`
-- A pull request against `run-2` containing the remediation and brief.
+- `runs/run-3/TRIAGE.md`
+- Branch: `appsec/run-3-triage`, created from `run-3`
+- A pull request against `run-3` containing the remediation and brief.
 - A committed regression test using Node's built-in `node:test` (no new dependencies), runnable with `npm test`, proving each fix.
+- Each test must fail when its specific fix is removed. If a test cannot fail without its fix, say so in the brief and explain why.
 
 The brief must include the executive summary, prioritized findings, evidence,
 root cause, policy reference, remediation, verification, and an
@@ -41,6 +42,7 @@ root cause, policy reference, remediation, verification, and an
 - Code changes must be minimal and limited to the affected file(s), plus the regression test file and the `npm test` script.
 - Any secret-leak check must block the commit if it finds a match.
 - Do not invent missing information, expose secrets, or make unrelated changes.
+- Label any claim you could not verify in your own workspace as an inference, and state what you were unable to check.
 
 ## Execution Trail
 Record the files read in order, decisions made, remediation choices,
