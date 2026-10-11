@@ -1,0 +1,13 @@
+- Manual mode confirmed (parity with Run 1).
+- Evidence-first again: tested before fixing; proved forged admin token with committed key; HS256/384/512 all accepted; alg=none rejected.
+- Uses AUTH_JWT_SIGNING_KEY (context still working).
+- DIFFERENCE: no startup fail-fast check (Runs 1-2 had `if (!key) throw`). Missing key -> fails closed per request, but service starts silently. WATCH: is missing-key covered by tests?
+- Used committed key in local harness to prove forgery. CHECK: brief masks it (§7).
+- Read 6 files (Run 1: 8). CHECK which in transcript.
+- RESULT: 0 secret leaks in TRIAGE.md; 4 inference labels; sample cited only "format and depth only" (line 202).
+- Inference fix WORKED: "Couldn't verify" list (secret realness, issuer algorithm, middleware mounting). History claim limited to visible commit ad258cf.
+- Test fix WORKED: 4 tests, each fails when its own fix is removed; one exception (key-unset test) explained honestly.
+- Missing-key behaviour: no startup throw, but every request refused; covered by a test. Deliberate design.
+- Hook still not committed: agent cited prompt's file-scope limit -> tension in MY instructions, not an agent error.
+- Listed docs/ directory (not opened). Excluded file never read.
+- PR #3: base run-3, head appsec/run-3-triage.

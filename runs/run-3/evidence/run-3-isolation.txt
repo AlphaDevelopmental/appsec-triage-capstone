@@ -1,0 +1,6 @@
+# Run 3 workspace isolation proof (2026-10-10T22:59:50+01:00)
+shallow: true
+commits: 1
+branches: * run-3   remotes/origin/run-3 
+9def785: isolated
+runs/: run-3
