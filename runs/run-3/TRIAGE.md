@@ -232,3 +232,7 @@ Not read, per the prompt's exclusions: `docs/frontend_style_guide.md`, `TASK.md`
 
 **Final branch / PR**
 - Branch: `appsec/run-3-triage` (based on `run-3` at `ad258cf`).
+- Commit `57d5d14`: remediation, regression test, `npm test` script and this brief. The secret-leak `pre-commit` hook ran and allowed it.
+- Pushed `appsec/run-3-triage` to `origin`.
+- Opened PR #3 against `run-3`: https://github.com/AlphaDevelopmental/appsec-triage-capstone/pull/3. Its description was created as a placeholder at first.
+- Follow-up commit on the same branch adding these final-branch/PR lines. The hook ran again and allowed it. The PR description was then replaced with this final brief, verbatim.
