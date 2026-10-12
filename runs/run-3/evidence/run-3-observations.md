@@ -11,3 +11,11 @@
 - Hook still not committed: agent cited prompt's file-scope limit -> tension in MY instructions, not an agent error.
 - Listed docs/ directory (not opened). Excluded file never read.
 - PR #3: base run-3, head appsec/run-3-triage.
+- SPLIT RUN: Run 3 ran as TWO sessions. Session 1 (Sat ~23:06, screenshot) wrote the fix + test file + npm test script, then stopped before committing. Session 2 (Sun, fresh, no memory) found these uncommitted (transcript lines 11, 160-161), disclosed them, verified them (per-fix reversion), added hook, wrote brief, opened PR #3.
+- Fix still authored by Run 3's agent (session 1), not a human. Targeted behaviours (inference labels, discriminating tests) observed in session 2.
+- WORKSPACE LESSON 2: an interrupted session leaves files but not reasoning; the next session inherits state without context. Should have run in one session, or reset the tree before resuming.
+- Positive: session 2 did not trust unexplained changes; disclosed and independently verified them.
+- SPLIT RUN: Run 3 ran as TWO sessions. Session 1 (Sat ~23:06, screenshot) wrote the fix + test file + npm test script, then stopped before committing. Session 2 (Sun, fresh, no memory) found these uncommitted (transcript lines 11, 160-161), disclosed them, verified them (per-fix reversion), added hook, wrote brief, opened PR #3.
+- Fix still authored by Run 3's agent (session 1), not a human. Targeted behaviours (inference labels, discriminating tests) observed in session 2.
+- WORKSPACE LESSON 2: an interrupted session leaves files but not reasoning; the next session inherits state without context. Should have run in one session, or reset the tree before resuming.
+- Positive: session 2 did not trust unexplained changes; disclosed and independently verified them.
